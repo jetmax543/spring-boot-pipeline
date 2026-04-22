@@ -18,4 +18,9 @@ public class QuotesController {
 		return "App is Up";
 	}
 
+	@GetMapping("/test")
+	public String test() {
+		return "test";
+	}
+
 }
