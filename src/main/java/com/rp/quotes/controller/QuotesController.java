@@ -18,4 +18,10 @@ public class QuotesController {
 		return "App is Up";
 	}
 
+	@GetMapping
+	public String awsTest() {
+		return "Hello from AWS!..";
+	}
+
+
 }
