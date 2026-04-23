@@ -39,6 +39,6 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             # Kill the process running on port 8080 if it exists
-            sudo fuser -k 8080/tcp || true
+            sudo fuser -k 8194/tcp || true
             # Run the new JAR in the background using nohup
             nohup java -jar /home/ubuntu/app/*.jar > /home/ubuntu/app/app.log 2>&1 &
