@@ -1,0 +1,23 @@
+# .github/workflows/maven-ci.yml
+name: Java CI with Maven
+
+on:
+  pull_request:
+    branches: [ "main" ] # Runs whenever a PR is opened against main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4 # Clones your code onto the runner
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Build and Run Tests
+        # This is the command that catches bugs before they hit production
+        run: mvn -B package --file pom.xml
