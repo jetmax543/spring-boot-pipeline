@@ -1,0 +1,20 @@
+name: Branch Guard
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check-source-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify PR Source
+        if: github.head_ref != 'dev'
+        run: |
+          echo "ERROR: Only the 'dev' branch can be merged into 'main'."
+          echo "Current source branch: ${{ github.head_ref }}"
+          exit 1 # This fails the job
+      - name: Success
+        if: github.head_ref == 'dev'
+        run: echo "PR is coming from 'dev'. Validation passed."
