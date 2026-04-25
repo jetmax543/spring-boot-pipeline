@@ -20,8 +20,7 @@ public class QuotesController {
 
 	@GetMapping
 	public String awsTest() {
-		return "Hello from AWS!..";
+		return "Hello from AWS Dev Environment!..";
 	}
-
 
 }
