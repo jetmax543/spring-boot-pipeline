@@ -3,7 +3,7 @@ name: Java CI with Maven
 
 on:
   pull_request:
-    branches: [ "main" ] # Runs whenever a PR is opened against main
+    branches: [ "main" , "dev" ] # Runs whenever a PR is opened against main
 
 jobs:
   build:
