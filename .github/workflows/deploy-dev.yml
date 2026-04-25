@@ -1,0 +1,42 @@
+name: Dev Deployment
+
+on:
+  push:
+    branches: [ "dev" ] # Triggers only on push to dev
+
+jobs:
+  deploy-dev:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml -DskipTests
+
+      - name: Copy JAR to Dev Folder
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "target/*.jar"
+          target: "/home/ubuntu/app-dev"
+          strip_components: 1
+
+      - name: Execute Dev Start Commands
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            # Kill process on dev port 8081
+            sudo fuser -k 8081/tcp || true
+            # Start app with the dev port override
+            nohup java -jar /home/ubuntu/app-dev/*.jar --server.port=8081 > /home/ubuntu/app-dev/dev.log 2>&1 &
