@@ -10,11 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Verify PR Source
-        if: github.head_ref != 'dev'
+        if: github.head_ref != 'dev' && !startsWith(github.head_ref, 'feature/')
         run: |
-          echo "ERROR: Only the 'dev' branch can be merged into 'main'."
+          echo "ERROR: Only the 'dev' or 'feature/' branch can be merged into 'main'."
           echo "Current source branch: ${{ github.head_ref }}"
           exit 1 # This fails the job
       - name: Success
-        if: github.head_ref == 'dev'
-        run: echo "PR is coming from 'dev'. Validation passed."
+        if: github.head_ref == 'dev' || startsWith(github.head_ref, 'feature/')
+        run: echo "PR is coming from valid branch. Validation passed."
